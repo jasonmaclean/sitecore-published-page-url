@@ -1,0 +1,90 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>1ad3cf2e-8a52-4857-8aac-a89542731775</ProjectGuid>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <CompactSitecoreItemsInProjectFile>True</CompactSitecoreItemsInProjectFile>
+    <AssemblyName>Sitecore.Feature.PublishedPageUrl.Master</AssemblyName>
+    <Name>Sitecore.Feature.PublishedPageUrl.Master</Name>
+    <RootNamespace>Sitecore.Feature.PublishedPageUrl.Master</RootNamespace>
+    <ManageRoles>False</ManageRoles>
+    <SitecoreDatabase>master</SitecoreDatabase>
+    <AssemblyStatus>Include</AssemblyStatus>
+    <SourceWebVirtualPath>/Sitecore.Feature.PublishedPageUrl.csproj</SourceWebVirtualPath>
+    <SourceWebProject>{e3940fb7-d9b5-4739-8087-19a77c69d9c3}|src\Feature\Sitecore.Feature.PublishedPageUrl\Sitecore.Feature.PublishedPageUrl.csproj</SourceWebProject>
+    <SourceWebPhysicalPath>..\Sitecore.Feature.PublishedPageUrl</SourceWebPhysicalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <RecursiveDeployAction>Ignore</RecursiveDeployAction>
+    <PackageName>
+    </PackageName>
+    <PackageAuthor>
+    </PackageAuthor>
+    <PackagePublisher>
+    </PackagePublisher>
+    <PackageVersion>
+    </PackageVersion>
+    <PackageReadme>
+    </PackageReadme>
+    <SitecoreAssemblyPath>
+    </SitecoreAssemblyPath>
+    <GeneratePackage>False</GeneratePackage>
+    <SeperateFilesAndItems>False</SeperateFilesAndItems>
+    <PackageExcludeCode>False</PackageExcludeCode>
+    <AddDateTimeToPackageName>False</AddDateTimeToPackageName>
+    <EnableValidations>False</EnableValidations>
+    <ValidationSettingsFilePath>.\Sitecore.Feature.PublishedPageUrl.Master_Debug.xml</ValidationSettingsFilePath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <RecursiveDeployAction>Ignore</RecursiveDeployAction>
+    <PackageName>
+    </PackageName>
+    <PackageAuthor>
+    </PackageAuthor>
+    <PackagePublisher>
+    </PackagePublisher>
+    <PackageVersion>
+    </PackageVersion>
+    <PackageReadme>
+    </PackageReadme>
+    <SitecoreAssemblyPath>
+    </SitecoreAssemblyPath>
+    <GeneratePackage>False</GeneratePackage>
+    <SeperateFilesAndItems>False</SeperateFilesAndItems>
+    <PackageExcludeCode>False</PackageExcludeCode>
+    <AddDateTimeToPackageName>True</AddDateTimeToPackageName>
+    <BuildWebDeploy>False</BuildWebDeploy>
+    <WebDeployPackageCodeAndItemOptions>CodeOnly</WebDeployPackageCodeAndItemOptions>
+    <WebDeployPackageName>
+    </WebDeployPackageName>
+    <WebDeployAppendDateAndTimeToPackageName>True</WebDeployAppendDateAndTimeToPackageName>
+    <ContinueOnItemDeployError>False</ContinueOnItemDeployError>
+    <EnableValidations>False</EnableValidations>
+    <ValidationSettingsFilePath>.\Sitecore.Feature.PublishedPageUrl.Master_Release.xml</ValidationSettingsFilePath>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyAttributes Include="AssemblyFileVersion">
+      <Value>$(AssemblyFileVersion)</Value>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyVersion">
+      <Value>$(AssemblyVersion)</Value>
+    </AssemblyAttributes>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sitecore.Feature.PublishedPageUrl\Sitecore.Feature.PublishedPageUrl.csproj">
+      <Project>{e3940fb7-d9b5-4739-8087-19a77c69d9c3}</Project>
+      <Name>Sitecore.Feature.PublishedPageUrl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ExcludedAssemblies Include="Sitecore.Feature.PublishedPageUrl.%2a" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\HedgehogDevelopment\SitecoreProject\v9.0\HedgehogDevelopment.SitecoreProject.targets" Condition="Exists('$(MSBuildExtensionsPath)\HedgehogDevelopment\SitecoreProject\v9.0\HedgehogDevelopment.SitecoreProject.targets')" />
+</Project>
