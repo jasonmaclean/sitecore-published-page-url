@@ -87,7 +87,10 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                                 options.AlwaysIncludeServerUrl = false;
                                 options.SiteResolving = true;
 
-                                url += LinkManager.GetItemUrl(editingItem, options).ToLowerInvariant();
+                                var path = LinkManager.GetItemUrl(editingItem, options).ToLowerInvariant();
+                                path = path.Replace(url, "").Replace(":443", "").Replace(":80", "");
+
+                                url += path;
                             }
                         }
 
@@ -179,11 +182,11 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
 
                 return Factory.GetSite(siteName);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error($"Sitecore.Feature.PublishedPageUrl.Pipelines.ShowPublishedPageUrl.GetSiteContext -> {ex}", this);
             }
-            return null;            
+            return null;
         }
     }
 }
