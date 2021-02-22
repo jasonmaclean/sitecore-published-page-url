@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PublishedPageUrl", "Publish
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sitecore.Feature.PublishedPageUrl", "src\Feature\Sitecore.Feature.PublishedPageUrl\Sitecore.Feature.PublishedPageUrl.csproj", "{E3940FB7-D9B5-4739-8087-19A77C69D9C3}"
 EndProject
-Project("{CAA73BB0-EF22-4D79-A57E-DF67B3BA9C80}") = "Sitecore.Feature.PublishedPageUrl.Master", "src\Feature\Sitecore.Feature.PublishedPageUrl.Master\Sitecore.Feature.PublishedPageUrl.Master.scproj", "{1AD3CF2E-8A52-4857-8AAC-A89542731775}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,12 +19,6 @@ Global
 		{E3940FB7-D9B5-4739-8087-19A77C69D9C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3940FB7-D9B5-4739-8087-19A77C69D9C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3940FB7-D9B5-4739-8087-19A77C69D9C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AD3CF2E-8A52-4857-8AAC-A89542731775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AD3CF2E-8A52-4857-8AAC-A89542731775}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AD3CF2E-8A52-4857-8AAC-A89542731775}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{1AD3CF2E-8A52-4857-8AAC-A89542731775}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AD3CF2E-8A52-4857-8AAC-A89542731775}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AD3CF2E-8A52-4857-8AAC-A89542731775}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,7 +26,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{52797614-B82C-459A-A14F-87F99607D52F} = {CFEC888C-6C86-4DB6-A837-77FBC9918B4E}
 		{E3940FB7-D9B5-4739-8087-19A77C69D9C3} = {52797614-B82C-459A-A14F-87F99607D52F}
-		{1AD3CF2E-8A52-4857-8AAC-A89542731775} = {52797614-B82C-459A-A14F-87F99607D52F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DFBB0B7-30BA-43D6-A715-227B6ED9F3A5}

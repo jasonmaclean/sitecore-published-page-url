@@ -63,7 +63,7 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
 
                     if (itemSite == null)
                     {
-                        Log.Error($"Sitecore.Feature.PublishedPageUrl.Pipelines.ShowPublishedPageUrl -> No site found for item {editingItem.ID}", this);
+                        Log.Info($"Sitecore.Feature.PublishedPageUrl.Pipelines.ShowPublishedPageUrl -> No site found for item {editingItem.ID} in the RootUrls area of Feature.PublishedPageUrl.config", this);
                         return;
                     }
 
