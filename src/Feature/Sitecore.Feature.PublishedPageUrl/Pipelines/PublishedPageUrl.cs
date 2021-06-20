@@ -179,8 +179,15 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
             try
             {
                 string siteName = item.Paths.FullPath.Split('/').Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().ToList()[2].ToLowerInvariant();
+                var siteContext = Factory.GetSite(siteName);
 
-                return Factory.GetSite(siteName);
+                if (siteContext == null)
+                {
+                    Log.Info($"Sitecore.Feature.PublishedPageUrl.Pipelines.ShowPublishedPageUrl.GetSiteContext -> No site context found based off item path. Assuming \"website\".", this);
+                    siteContext = Factory.GetSite("website");
+                }
+
+                return siteContext;
             }
             catch (Exception ex)
             {
