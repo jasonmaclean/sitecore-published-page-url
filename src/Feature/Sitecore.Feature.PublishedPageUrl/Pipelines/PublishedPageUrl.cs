@@ -44,7 +44,8 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                 Language = node.Attributes["language"].Value,
                 Url = node.Attributes["url"].Value.EndsWith("/") 
                     ? node.Attributes["url"].Value.Substring(0, node.Attributes["url"].Value.Length -1) 
-                    : node.Attributes["url"].Value
+                    : node.Attributes["url"].Value,
+                SortOrder = System.Convert.ToInt32(node.Attributes["sortorder"].Value)
             });
         }
 
@@ -93,8 +94,8 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                                     options.AlwaysIncludeServerUrl = false;
                                     options.SiteResolving = true;
 
-                                    var path = Sitecore.StringUtil.EnsurePrefix('/', LinkManager.GetItemUrl(editingItem, options).ToLowerInvariant());
-                                    path = path.Replace(":443", "").Replace(":80", "");
+                                    var path = LinkManager.GetItemUrl(editingItem, options).ToLowerInvariant();
+                                    path = path.Replace(url,"").Replace(":443", "").Replace(":80", "");
 
                                     url += path;
                                 }
@@ -120,7 +121,7 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                         var path = Sitecore.StringUtil.EnsurePrefix('/', MediaManager.GetMediaUrl(editingItem, options).Replace("/sitecore/shell", ""));
                         var language = editingItem.Language.ToString().ToLowerInvariant();
 
-                        foreach (var rootUrl in RootUrls.Where(x => x.Language.ToLowerInvariant() == language))
+                        foreach (var rootUrl in RootUrls.Where(x => x.Language.ToLowerInvariant() == language).OrderBy(x => x.SortOrder))
                             urls.Add($"{rootUrl.Url}/{language}{path}");
 
                         rootUrlMissing = false;
