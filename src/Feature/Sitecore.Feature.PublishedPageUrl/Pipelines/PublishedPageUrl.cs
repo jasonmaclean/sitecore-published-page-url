@@ -105,7 +105,6 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
 
                             rootUrlMissing = false;
                         }
-
                     }
                     else if (editingItem.Paths.IsMediaItem && editingItem.TemplateID != TemplateIDs.MediaFolder)
                     {
@@ -125,6 +124,10 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                             urls.Add($"{rootUrl.Url}/{language}{path}");
 
                         rootUrlMissing = false;
+                    }
+                    else
+                    {
+                        return;
                     }
 
                     StringBuilder sectionText = new StringBuilder();
