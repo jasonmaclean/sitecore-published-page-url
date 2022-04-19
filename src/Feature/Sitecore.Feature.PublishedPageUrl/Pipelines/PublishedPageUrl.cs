@@ -3,6 +3,7 @@ using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.Feature.PublishedPageUrl.Models;
 using Sitecore.Links;
+using Sitecore.Resources.Media;
 using Sitecore.Shell;
 using Sitecore.Shell.Applications.ContentEditor.Pipelines.RenderContentEditor;
 using Sitecore.Sites;
@@ -41,7 +42,9 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
             {
                 SiteName = node.Attributes["sitename"].Value,
                 Language = node.Attributes["language"].Value,
-                Url = node.Attributes["url"].Value
+                Url = node.Attributes["url"].Value.EndsWith("/") 
+                    ? node.Attributes["url"].Value.Substring(0, node.Attributes["url"].Value.Length -1) 
+                    : node.Attributes["url"].Value
             });
         }
 
@@ -57,42 +60,68 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
             {
                 Item editingItem = args?.Item;
 
-                if (editingItem != null && ItemHasPresentationDetails(editingItem))
+                if (editingItem != null)
                 {
-                    SiteContext itemSite = GetSiteContext(editingItem);
-
-                    if (itemSite == null)
-                    {
-                        Log.Info($"Sitecore.Feature.PublishedPageUrl.Pipelines.ShowPublishedPageUrl -> No site found for item {editingItem.ID} in the RootUrls area of Feature.PublishedPageUrl.config", this);
-                        return;
-                    }
-
-                    RootUrl rootUrl = RootUrls.FirstOrDefault(x => x.SiteName == itemSite.Name && x.Language.ToLowerInvariant() == editingItem.Language.Name.ToLowerInvariant());
-
-                    string url = string.Empty;
                     bool rootUrlMissing = true;
+                    var urls = new List<string>();
 
-                    if (rootUrl != null)
+                    var urlLabel = Settings.GetSetting("Sitecore.Feature.PublishedPageUrl.UrlLabel");
+                    var enableLinkInUrl = Settings.GetBoolSetting("Sitecore.Feature.PublishedPageUrl.EnableLinkInUrl", true);
+                    var dataSectionTitle = Settings.GetSetting("Sitecore.Feature.PublishedPageUrl.DataSectionTitle");
+
+                    if (ItemHasPresentationDetails(editingItem))
                     {
-                        url = rootUrl.Url.ToLowerInvariant();
+                        SiteContext itemSite = GetSiteContext(editingItem);
 
-                        if (!string.IsNullOrWhiteSpace(url) && url.EndsWith("/"))
-                            url = url.Remove(url.Length - 1);
-
-                        using (new SiteContextSwitcher(itemSite))
+                        if (itemSite == null)
                         {
-                            using (new Globalization.LanguageSwitcher(editingItem.Language))
-                            {
-                                var options = LinkManager.GetDefaultUrlOptions();
-                                options.AlwaysIncludeServerUrl = false;
-                                options.SiteResolving = true;
-
-                                var path = LinkManager.GetItemUrl(editingItem, options).ToLowerInvariant();
-                                path = path.Replace(url, "").Replace(":443", "").Replace(":80", "");
-
-                                url += path;
-                            }
+                            Log.Info($"Sitecore.Feature.PublishedPageUrl.Pipelines.ShowPublishedPageUrl -> No site found for item {editingItem.ID} in the RootUrls area of Feature.PublishedPageUrl.config", this);
+                            return;
                         }
+
+                        RootUrl rootUrl = RootUrls.FirstOrDefault(x => x.SiteName == itemSite.Name && x.Language.ToLowerInvariant() == editingItem.Language.Name.ToLowerInvariant());
+
+                        if (rootUrl != null)
+                        {
+                            var url = rootUrl.Url.ToLowerInvariant();
+
+                            using (new SiteContextSwitcher(itemSite))
+                            {
+                                using (new Globalization.LanguageSwitcher(editingItem.Language))
+                                {
+                                    var options = LinkManager.GetDefaultUrlOptions();
+                                    options.AlwaysIncludeServerUrl = false;
+                                    options.SiteResolving = true;
+
+                                    var path = Sitecore.StringUtil.EnsurePrefix('/', LinkManager.GetItemUrl(editingItem, options).ToLowerInvariant());
+                                    path = path.Replace(":443", "").Replace(":80", "");
+
+                                    url += path;
+                                }
+                            }
+
+                            urls.Add(url);
+
+                            rootUrlMissing = false;
+                        }
+
+                    }
+                    else if (editingItem.Paths.IsMediaItem && editingItem.TemplateID != TemplateIDs.MediaFolder)
+                    {
+                        urlLabel = Settings.GetSetting("Sitecore.Feature.PublishedPageUrl.MediaUrlLabel");
+                        enableLinkInUrl = Settings.GetBoolSetting("Sitecore.Feature.PublishedPageUrl.EnableLinkInMediaUrl", true);
+                        dataSectionTitle = Settings.GetSetting("Sitecore.Feature.PublishedPageUrl.MediaDataSectionTitle");
+
+                        var options = new MediaUrlOptions
+                        {
+                            AlwaysIncludeServerUrl = false
+                        };
+
+                        var path = Sitecore.StringUtil.EnsurePrefix('/', MediaManager.GetMediaUrl(editingItem, options).Replace("/sitecore/shell", ""));
+                        var language = editingItem.Language.ToString().ToLowerInvariant();
+
+                        foreach (var rootUrl in RootUrls.Where(x => x.Language.ToLowerInvariant() == language))
+                            urls.Add($"{rootUrl.Url}/{language}{path}");
 
                         rootUrlMissing = false;
                     }
@@ -116,16 +145,26 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                     else
                     {
                         sectionText.Append("<tr>");
-                        sectionText.Append($"<td>{Settings.GetSetting("Sitecore.Feature.PublishedPageUrl.UrlLabel")}:&nbsp;</td>");
-                        sectionText.Append("<td>");
+                        sectionText.Append($"<td");
+                        if (urls.Count > 1)
+                            sectionText.Append(" style=\"line-height: 20px;\"");
+                        sectionText.Append($" valign=\"top\">{urlLabel}:&nbsp;</td>");
 
-                        if (Settings.GetBoolSetting("Sitecore.Feature.PublishedPageUrl.EnableLinkInUrl", true) && url.Contains("http"))
+                        sectionText.Append("<td");
+                        if (urls.Count > 1)
+                            sectionText.Append(" style=\"line-height: 20px;\" ");
+                        sectionText.Append(">");
+
+                        foreach (var url in urls)
                         {
-                            sectionText.Append($"<a href=\"{url}\" target=\"_blank\">{url}</a>");
-                        }
-                        else
-                        {
-                            sectionText.Append($"<input readonly=\"readonly\" onclick=\"javascript: this.select(); return false\" value=\"{url}\">");
+                            if (enableLinkInUrl && url.ToLowerInvariant().Contains("http"))
+                            {
+                                sectionText.Append($"<a href=\"{url}\" target=\"_blank\">{url}</a><br />");
+                            }
+                            else
+                            {
+                                sectionText.Append($"<input style\"min-height:20px;\"readonly=\"readonly\" onclick=\"javascript: this.select(); return false\" value=\"{url}\"><br />");
+                            }
                         }
 
                         sectionText.Append("</td>");
@@ -135,7 +174,7 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                     sectionText.Append("</tbody>");
                     sectionText.Append("</table>");
 
-                    args.EditorFormatter.RenderSectionBegin(args.Parent, "PublishedPageUrlDataSection", "PublishedPageUrlDataSection", Settings.GetSetting("Sitecore.Feature.PublishedPageUrl.DataSectionTitle"), "People/32x32/atom.png", showDataSection, UserOptions.ContentEditor.RenderCollapsedSections);
+                    args.EditorFormatter.RenderSectionBegin(args.Parent, "PublishedPageUrlDataSection", "PublishedPageUrlDataSection", dataSectionTitle, "People/32x32/atom.png", showDataSection, UserOptions.ContentEditor.RenderCollapsedSections);
                     args.EditorFormatter.AddLiteralControl(args.Parent, sectionText.ToString());
                     args.EditorFormatter.RenderSectionEnd(args.Parent, renderPageUrlSection, true);
                 }
