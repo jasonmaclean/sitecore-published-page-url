@@ -69,7 +69,7 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                     var urlLabel = Settings.GetSetting("Sitecore.Feature.PublishedPageUrl.UrlLabel");
                     var enableLinkInUrl = Settings.GetBoolSetting("Sitecore.Feature.PublishedPageUrl.EnableLinkInUrl", true);
                     var dataSectionTitle = Settings.GetSetting("Sitecore.Feature.PublishedPageUrl.DataSectionTitle");
-
+                                        
                     if (ItemHasPresentationDetails(editingItem))
                     {
                         SiteContext itemSite = GetSiteContext(editingItem);
@@ -106,7 +106,10 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                             rootUrlMissing = false;
                         }
                     }
-                    else if (editingItem.Paths.IsMediaItem && editingItem.TemplateID != TemplateIDs.MediaFolder)
+                    else if (editingItem.Paths.IsMediaItem
+                        && editingItem.TemplateID != TemplateIDs.MediaFolder
+                        && !editingItem.Template.BaseTemplates.Any(x => x.ID == TemplateIDs.MediaFolder)
+                        )
                     {
                         urlLabel = Settings.GetSetting("Sitecore.Feature.PublishedPageUrl.MediaUrlLabel");
                         enableLinkInUrl = Settings.GetBoolSetting("Sitecore.Feature.PublishedPageUrl.EnableLinkInMediaUrl", true);
