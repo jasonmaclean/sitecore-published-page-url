@@ -1,0 +1,63 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>19051e52-63d5-4c72-b540-14cf0f2498cb</ProjectGuid>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <CompactSitecoreItemsInProjectFile>True</CompactSitecoreItemsInProjectFile>
+    <AssemblyName>Sitecore.Feature.PublishedPageUrl.Master</AssemblyName>
+    <Name>Sitecore.Feature.PublishedPageUrl.Master</Name>
+    <RootNamespace>Sitecore.Feature.PublishedPageUrl.Master</RootNamespace>
+    <ManageRoles>False</ManageRoles>
+    <SitecoreDatabase>master</SitecoreDatabase>
+    <AssemblyStatus>Include</AssemblyStatus>
+    <SourceWebVirtualPath>/Sitecore.Feature.PublishedPageUrl.csproj</SourceWebVirtualPath>
+    <SourceWebProject>{e3940fb7-d9b5-4739-8087-19a77c69d9c3}|src\Feature\Sitecore.Feature.PublishedPageUrl\Sitecore.Feature.PublishedPageUrl.csproj</SourceWebProject>
+    <SourceWebPhysicalPath>..\Sitecore.Feature.PublishedPageUrl</SourceWebPhysicalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <RecursiveDeployAction>Ignore</RecursiveDeployAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <RecursiveDeployAction>Ignore</RecursiveDeployAction>
+    <PackageName>Published.Page.Url-1.2</PackageName>
+    <PackageAuthor>Jason MacLean</PackageAuthor>
+    <PackagePublisher />
+    <PackageVersion />
+    <PackageReadme />
+    <SitecoreAssemblyPath />
+    <GeneratePackage>True</GeneratePackage>
+    <SeperateFilesAndItems>False</SeperateFilesAndItems>
+    <PackageExcludeCode>False</PackageExcludeCode>
+    <AddDateTimeToPackageName>True</AddDateTimeToPackageName>
+    <BuildWebDeploy>True</BuildWebDeploy>
+    <WebDeployPackageCodeAndItemOptions>CodeAndItems</WebDeployPackageCodeAndItemOptions>
+    <WebDeployPackageName>Published.Page.Url-1.2</WebDeployPackageName>
+    <WebDeployAppendDateAndTimeToPackageName>True</WebDeployAppendDateAndTimeToPackageName>
+    <ContinueOnItemDeployError>False</ContinueOnItemDeployError>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyAttributes Include="AssemblyFileVersion">
+      <Value>$(AssemblyFileVersion)</Value>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyVersion">
+      <Value>$(AssemblyVersion)</Value>
+    </AssemblyAttributes>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sitecore.Feature.PublishedPageUrl\Sitecore.Feature.PublishedPageUrl.csproj">
+      <Project>{e3940fb7-d9b5-4739-8087-19a77c69d9c3}</Project>
+      <Name>Sitecore.Feature.PublishedPageUrl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ExcludedAssemblies Include="Sitecore.Feature.PublishedPageUrl.%2a" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\HedgehogDevelopment\SitecoreProject\v9.0\HedgehogDevelopment.SitecoreProject.targets" Condition="Exists('$(MSBuildExtensionsPath)\HedgehogDevelopment\SitecoreProject\v9.0\HedgehogDevelopment.SitecoreProject.targets')" />
+</Project>
