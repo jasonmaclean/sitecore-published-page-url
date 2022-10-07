@@ -1,5 +1,5 @@
 # sitecore-published-page-url
-Compatible with Sitecore 8-9, all versions.
+Compatible with Sitecore 8-10, all versions.
 
 Once installed, edit Sitecore.Feature.PublishedPageUrl.config. 
 
