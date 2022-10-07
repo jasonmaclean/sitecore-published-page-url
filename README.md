@@ -9,4 +9,6 @@ This config can be added to you solution with Roles used to set values for each 
 
 Other values can be edited in the settings area should you want to change them.
 
-For more information, see https://www.sitecorefundamentals.com/search/Published%20Page%20URL
+See:
+https://www.sitecorefundamentals.com/published-page-url-module
+https://www.sitecorefundamentals.com/the-publish-page-url-module-for-sitecore-now-offers-media-library-support
