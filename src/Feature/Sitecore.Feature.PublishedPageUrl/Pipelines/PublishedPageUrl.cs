@@ -1,4 +1,5 @@
 ﻿using Sitecore.Configuration;
+using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.Feature.PublishedPageUrl.Models;
@@ -20,6 +21,21 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
     public class ShowPublishedPageUrl
     {
         static List<RootUrl> RootUrls = new List<RootUrl>();
+        static List<ID> ItemTypesToTreatAsRootUrls { get; set; } = new List<ID>();
+
+        public void LoadTreatAsRootUrlIds(XmlNode node)
+        {
+            Log.Info($"Sitecore.Feature.PublishedPageUrl.Pipelines.ShowPublishedPageUrl.LoadTreatAsRootUrlIds -> Adding ID {node.InnerText}", this);
+
+            try
+            {
+                ItemTypesToTreatAsRootUrls.Add(new ID(node.InnerText));
+            }
+            catch(Exception ex)
+            {
+                Log.Error($"Sitecore.Feature.PublishedPageUrl.Pipelines.ShowPublishedPageUrl.LoadTreatAsRootUrlIds ->Invalid data in node {node.InnerText} ({ex})", this);
+            }
+        }
 
         public void LoadRootUrls(XmlNode node)
         {
@@ -69,8 +85,10 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                     var urlLabel = Settings.GetSetting("Sitecore.Feature.PublishedPageUrl.UrlLabel");
                     var enableLinkInUrl = Settings.GetBoolSetting("Sitecore.Feature.PublishedPageUrl.EnableLinkInUrl", true);
                     var dataSectionTitle = Settings.GetSetting("Sitecore.Feature.PublishedPageUrl.DataSectionTitle");
-                                        
-                    if (ItemHasPresentationDetails(editingItem))
+
+                    var treatItemAsRootUrl = ItemTypesToTreatAsRootUrls.Any(x => x.Equals(editingItem.TemplateID));
+
+                    if (ItemHasPresentationDetails(editingItem) || treatItemAsRootUrl)
                     {
                         SiteContext itemSite = GetSiteContext(editingItem);
 
@@ -80,7 +98,7 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                             return;
                         }
 
-                        RootUrl rootUrl = RootUrls.FirstOrDefault(x => x.SiteName == itemSite.Name && x.Language.ToLowerInvariant() == editingItem.Language.Name.ToLowerInvariant());
+                        var rootUrl = RootUrls.FirstOrDefault(x => x.SiteName == itemSite.Name && x.Language.ToLowerInvariant() == editingItem.Language.Name.ToLowerInvariant());
 
                         if (rootUrl != null)
                         {
@@ -96,6 +114,23 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
 
                                     var path = LinkManager.GetItemUrl(editingItem, options).ToLowerInvariant();
                                     path = path.Replace(url,"").Replace(":443", "").Replace(":80", "");
+
+                                    if (treatItemAsRootUrl)
+                                    {
+                                        if (path.StartsWith("/"))
+                                            path = path.Substring(1);
+
+                                        var pathParts = path.Split('/');
+
+                                        if (pathParts.Length > 1)
+                                        {
+                                            path = $"/{path.Split('/').First()}/{path.Split('/').Last()}";
+                                        }
+                                        else
+                                        {
+                                            path = $"/{path.Split('/').Last()}";
+                                        }
+                                    }
 
                                     url += path;
                                 }
