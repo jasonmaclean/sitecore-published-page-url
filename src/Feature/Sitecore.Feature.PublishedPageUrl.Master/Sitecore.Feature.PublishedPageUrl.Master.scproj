@@ -26,7 +26,7 @@
     <DebugSymbols>false</DebugSymbols>
     <OutputPath>.\bin\Release\</OutputPath>
     <RecursiveDeployAction>Ignore</RecursiveDeployAction>
-    <PackageName>Published.Page.Url-1.2</PackageName>
+    <PackageName>Published.Page.Url-1.3</PackageName>
     <PackageAuthor>Jason MacLean</PackageAuthor>
     <PackagePublisher />
     <PackageVersion />
@@ -38,7 +38,7 @@
     <AddDateTimeToPackageName>True</AddDateTimeToPackageName>
     <BuildWebDeploy>True</BuildWebDeploy>
     <WebDeployPackageCodeAndItemOptions>CodeAndItems</WebDeployPackageCodeAndItemOptions>
-    <WebDeployPackageName>Published.Page.Url-1.2</WebDeployPackageName>
+    <WebDeployPackageName>Published.Page.Url-1.3</WebDeployPackageName>
     <WebDeployAppendDateAndTimeToPackageName>True</WebDeployAppendDateAndTimeToPackageName>
     <ContinueOnItemDeployError>False</ContinueOnItemDeployError>
   </PropertyGroup>
