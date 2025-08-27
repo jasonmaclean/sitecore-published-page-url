@@ -1,4 +1,4 @@
-﻿using Sitecore.Configuration;
+using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
@@ -98,11 +98,11 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                             return;
                         }
 
-                        var rootUrl = RootUrls.FirstOrDefault(x => x.SiteName == itemSite.Name && x.Language.ToLowerInvariant() == editingItem.Language.Name.ToLowerInvariant());
+                        var configRoolUrls = RootUrls.Where(x => x.SiteName == itemSite.Name && x.Language.ToLowerInvariant() == editingItem.Language.Name.ToLowerInvariant()).OrderBy(x => x.SortOrder);
 
-                        if (rootUrl != null)
+                        if (configRoolUrls != null && configRoolUrls.Any())
                         {
-                            var url = rootUrl.Url.ToLowerInvariant();
+                            var path = "";
 
                             using (new SiteContextSwitcher(itemSite))
                             {
@@ -112,8 +112,7 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                                     options.AlwaysIncludeServerUrl = false;
                                     options.SiteResolving = true;
 
-                                    var path = LinkManager.GetItemUrl(editingItem, options).ToLowerInvariant();
-                                    path = path.Replace(url,"").Replace(":443", "").Replace(":80", "");
+                                    path = LinkManager.GetItemUrl(editingItem, options).ToLowerInvariant();
 
                                     if (treatItemAsRootUrl)
                                     {
@@ -131,12 +130,16 @@ namespace Sitecore.Feature.PublishedPageUrl.Pipelines
                                             path = $"/{path.Split('/').Last()}";
                                         }
                                     }
-
-                                    url += path;
                                 }
                             }
 
-                            urls.Add(url);
+                            foreach (var configRootUrl in configRoolUrls)
+                            {
+                                var rootUrl = configRootUrl.Url;
+                                var cleanPath = path.Replace(rootUrl, "").Replace(":443", "").Replace(":80", "");
+
+                                urls.Add($"{rootUrl}{cleanPath}");
+                            }
 
                             rootUrlMissing = false;
                         }
