@@ -1,4 +1,4 @@
-﻿using Sitecore.Configuration;
+using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
